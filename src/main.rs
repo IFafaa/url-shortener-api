@@ -1,6 +1,8 @@
+use axum::http;
 use sqlx::postgres::PgPoolOptions;
 use std::env;
 use tokio::net::TcpListener;
+use tower_http::cors::{Any, CorsLayer};
 
 mod routes {
     pub mod router;
@@ -33,7 +35,12 @@ async fn main() {
         .await
         .expect("Failed to bind to address");
 
-    let app = routes::router::create_router(db_pool);
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods([http::Method::GET, http::Method::POST])
+        .allow_headers([http::header::CONTENT_TYPE]);
+
+    let app = routes::router::create_router(db_pool).layer(cors);
 
     println!("🚀 Server started successfully");
     axum::serve(listener, app)
