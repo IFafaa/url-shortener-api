@@ -31,7 +31,14 @@ Crie um arquivo `.env` baseado no `.env.example`:
 cp .env.example .env
 ```
 
-Edite o arquivo `.env` conforme necessário.
+#### Como configurar a URL do banco de dados no arquivo `.env`
+
+Adicione a URL de conexão do banco de dados PostgreSQL no seu arquivo `.env` com os valores adequados ao seu ambiente. A URL deve ter a seguinte estrutura:
+
+```env
+# URL de conexão do banco de dados PostgreSQL
+DATABASE_URL=postgres://<USUARIO>:<SENHA>@<HOST>:<PORTA>/<BANCO_DE_DADOS>
+```
 
 ### 4. Suba o Docker Compose
 
@@ -43,7 +50,7 @@ docker-compose up -d
 
 ### 5. Rode as migrations
 
-Em um outro terminal, execute as migrations para configurar o banco de dados:
+Execute as migrations para configurar o banco de dados:
 
 ```bash
 sqlx migrate run
@@ -51,7 +58,7 @@ sqlx migrate run
 
 ### 6. Execute o projeto
 
-Agora inicie a aplicação com o comando abaixo. Ele executará o servidor Rust enquanto o banco de dados está rodando no Docker Compose:
+Inicie a aplicação com o comando abaixo. Ele executará o servidor Rust enquanto o banco de dados está rodando no Docker Compose:
 
 ```bash
 cargo run
