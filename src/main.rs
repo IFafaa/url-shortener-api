@@ -20,7 +20,6 @@ async fn main() {
     dotenvy::dotenv().ok();
 
     let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let server_address = env::var("SERVER_ADDRESS").expect("SERVER_ADDRESS must be set");
 
     let db_pool = PgPoolOptions::new()
         .max_connections(16)
@@ -28,7 +27,9 @@ async fn main() {
         .await
         .expect("Failed to create database connection pool");
 
-    let listener = TcpListener::bind(server_address)
+    let addr: std::net::SocketAddr = std::net::SocketAddr::from(([0, 0, 0, 0], 3000));
+
+    let listener = TcpListener::bind(addr)
         .await
         .expect("Failed to bind to address");
 
