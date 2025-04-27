@@ -64,6 +64,48 @@ Inicie a aplicação com o comando abaixo. Ele executará o servidor Rust enquan
 cargo run
 ```
 
+## Endpoints da API
+
+### 1. Criar URL encurtada
+
+**POST** `/api/shortener`
+
+- **Descrição**: Cria uma URL encurtada a partir de uma URL original.
+- **Corpo da requisição**:
+  ```json
+  {
+    "url": "https://exemplo.com"
+  }
+  ```
+- **Resposta de sucesso**:
+  - **Status**: `200 OK`
+  - **Corpo**:
+    ```json
+    {
+      "shortUrlCode": "abc12345"
+    }
+    ```
+- **Erros possíveis**:
+  - `400 BAD REQUEST`: Quando o campo `url` está vazio.
+  - `500 INTERNAL SERVER ERROR`: Quando ocorre um erro interno no servidor.
+
+---
+
+### 2. Redirecionar para a URL original
+
+**GET** `/api/short/{id}`
+
+- **Descrição**: Redireciona para a URL original com base no código encurtado.
+- **Parâmetros de rota**:
+  - `id`: Código da URL encurtada.
+- **Resposta de sucesso**:
+  - **Status**: `302 FOUND`
+  - **Redireciona para**: A URL original.
+- **Erros possíveis**:
+  - `404 NOT FOUND`: Quando o código encurtado não é encontrado.
+  - `500 INTERNAL SERVER ERROR`: Quando ocorre um erro interno no servidor.
+
+
 ## Tecnologias utilizadas
 
 - **Rust**: Linguagem de programação principal.
