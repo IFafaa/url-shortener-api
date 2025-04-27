@@ -1,114 +1,113 @@
 # URL Shortener API
 
-Este é um projeto de uma API para encurtamento de URLs, desenvolvido em **Rust** utilizando o framework **Axum**. O projeto utiliza **PostgreSQL** como banco de dados, gerenciado via **Docker Compose**, e **SQLx** para interações com o banco.
+This is a project for a URL shortening API, developed in **Rust** using the **Axum** framework. The project uses **PostgreSQL** as the database, managed via **Docker Compose**, and **SQLx** for database interactions.
 
-## Pré-requisitos
+## Prerequisites
 
 - [Rust](https://www.rust-lang.org/tools/install)
 - [Docker](https://www.docker.com/)
 
-## Como rodar o projeto
+## How to run the project
 
-Siga os passos abaixo para configurar e executar o projeto:
+Follow the steps below to set up and run the project:
 
-### 1. Clone o repositório
+### 1. Clone the repository
 
 ```bash
 git clone https://github.com/IFafaa/url-shortener-api
 ```
 
-### 2. Acesse o diretório do projeto
+### 2. Navigate to the project directory
 
 ```bash
 cd url-shortener-api
 ```
 
-### 3. Configure o arquivo `.env`
+### 3. Configure the `.env` file
 
-Crie um arquivo `.env` baseado no `.env.example`:
+Create a `.env` file based on `.env.example`:
 
 ```bash
 cp .env.example .env
 ```
 
-#### Como configurar a URL do banco de dados no arquivo `.env`
+#### How to configure the database URL in the `.env` file
 
-Adicione a URL de conexão do banco de dados PostgreSQL no seu arquivo `.env` com os valores adequados ao seu ambiente. A URL deve ter a seguinte estrutura:
+Add the PostgreSQL database connection URL to your `.env` file with the appropriate values for your environment. The URL should have the following structure:
 
 ```env
-# URL de conexão do banco de dados PostgreSQL
-DATABASE_URL=postgres://<USUARIO>:<SENHA>@<HOST>:<PORTA>/<BANCO_DE_DADOS>
+# PostgreSQL database connection URL
+DATABASE_URL=postgres://<USER>:<PASSWORD>@<HOST>:<PORT>/<DATABASE>
 ```
 
-### 4. Suba o Docker Compose
+### 4. Start Docker Compose
 
-Inicie o banco de dados PostgreSQL com o Docker Compose:
+Start the PostgreSQL database using Docker Compose:
 
 ```bash
 docker-compose up -d
 ```
 
-### 5. Rode as migrations
+### 5. Run the migrations
 
-Execute as migrations para configurar o banco de dados:
+Run the migrations to set up the database:
 
 ```bash
 sqlx migrate run
 ```
 
-### 6. Execute o projeto
+### 6. Run the project
 
-Inicie a aplicação com o comando abaixo. Ele executará o servidor Rust enquanto o banco de dados está rodando no Docker Compose:
+Start the application with the command below. It will run the Rust server while the database is running in Docker Compose:
 
 ```bash
 cargo run
 ```
 
-## Endpoints da API
+## API Endpoints
 
-### 1. Criar URL encurtada
+### 1. Create a shortened URL
 
 **POST** `/api/shortener`
 
-- **Descrição**: Cria uma URL encurtada a partir de uma URL original.
-- **Corpo da requisição**:
-  ```json
-  {
-    "url": "https://exemplo.com"
-  }
-  ```
-- **Resposta de sucesso**:
-  - **Status**: `200 OK`
-  - **Corpo**:
+- **Description**: Creates a shortened URL from an original URL.
+- **Request body**:
     ```json
     {
-      "shortUrlCode": "abc12345"
+        "url": "https://example.com"
     }
     ```
-- **Erros possíveis**:
-  - `400 BAD REQUEST`: Quando o campo `url` está vazio.
-  - `500 INTERNAL SERVER ERROR`: Quando ocorre um erro interno no servidor.
+- **Success response**:
+    - **Status**: `200 OK`
+    - **Body**:
+        ```json
+        {
+            "shortUrlCode": "abc12345"
+        }
+        ```
+- **Possible errors**:
+    - `400 BAD REQUEST`: When the `url` field is empty.
+    - `500 INTERNAL SERVER ERROR`: When an internal server error occurs.
 
 ---
 
-### 2. Redirecionar para a URL original
+### 2. Redirect to the original URL
 
 **GET** `/api/short/{id}`
 
-- **Descrição**: Redireciona para a URL original com base no código encurtado.
-- **Parâmetros de rota**:
-  - `id`: Código da URL encurtada.
-- **Resposta de sucesso**:
-  - **Status**: `302 FOUND`
-  - **Redireciona para**: A URL original.
-- **Erros possíveis**:
-  - `404 NOT FOUND`: Quando o código encurtado não é encontrado.
-  - `500 INTERNAL SERVER ERROR`: Quando ocorre um erro interno no servidor.
+- **Description**: Redirects to the original URL based on the shortened code.
+- **Route parameters**:
+    - `id`: Shortened URL code.
+- **Success response**:
+    - **Status**: `302 FOUND`
+    - **Redirects to**: The original URL.
+- **Possible errors**:
+    - `404 NOT FOUND`: When the shortened code is not found.
+    - `500 INTERNAL SERVER ERROR`: When an internal server error occurs.
 
+## Technologies used
 
-## Tecnologias utilizadas
-
-- **Rust**: Linguagem de programação principal.
-- **Axum**: Framework web para Rust.
-- **Docker Compose**: Gerenciamento do banco de dados PostgreSQL.
-- **SQLx**: Biblioteca para interações com o banco de dados.
+- **Rust**: Main programming language.
+- **Axum**: Web framework for Rust.
+- **Docker Compose**: Management of the PostgreSQL database.
+- **SQLx**: Library for database interactions.
